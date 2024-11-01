@@ -30,6 +30,11 @@ public class PostApi {
                .title(createPostRequestDto.title())
                .contents(createPostRequestDto.contents())
                .writer(createPostRequestDto.writer())
+               .youtubeUrl(createPostRequestDto.youtubeUrl())
+               .likeCount(createPostRequestDto.likeCount())
+               .dislikeCount(createPostRequestDto.dislikeCount())
+               .images(createPostRequestDto.images())
+               .postAddress(createPostRequestDto.postAddress())
                .category(category)
                .build()
         );
