@@ -39,6 +39,7 @@ public record PostDto(
 
     @Builder
     public record CreatePostResponse(
+            Long id,
             String title,
             String contents,
             String writer,
@@ -46,4 +47,17 @@ public record PostDto(
             LocalDateTime updateAt
     ) {}
 
+    @Builder
+    public record FetchPostResponse(
+            Long id,
+            String title,
+            String contents,
+            String writer,
+            String youtubeUrl,
+            int likeCount,
+            int dislikeCount,
+            List<String> images,
+            PostAddress postAddress,
+            String categoryName
+    ) {}
 }
