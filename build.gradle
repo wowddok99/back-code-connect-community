@@ -35,6 +35,10 @@ dependencies {
 
     // MYSQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+    implementation group: 'org.springdoc', name:
+            'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 }
 
 tasks.named('test') {
