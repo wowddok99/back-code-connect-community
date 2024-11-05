@@ -43,8 +43,8 @@ public record PostDto(
             String title,
             String contents,
             String writer,
-            LocalDateTime createAt,
-            LocalDateTime updateAt
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {}
 
     @Builder
@@ -60,4 +60,22 @@ public record PostDto(
             PostAddress postAddress,
             String categoryName
     ) {}
+
+    @Builder
+    public record FetchPostsResponse(
+        List<PostsResponse> posts,
+        int currentPage,
+        int totalPages,
+        Long totalElements
+    ) {
+        @Builder
+        public record PostsResponse(
+                Long id,
+                String title,
+                String writer,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt
+
+        ) {}
+    }
 }

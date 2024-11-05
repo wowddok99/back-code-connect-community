@@ -1,5 +1,6 @@
 package com.example.codeconvoproject.api;
 
+import com.example.codeconvoproject.dto.PostDto.FetchPostsResponse;
 import com.example.codeconvoproject.dto.PostDto.FetchPostResponse;
 import com.example.codeconvoproject.dto.PostDto.CreatePostRequest;
 import com.example.codeconvoproject.dto.PostDto.CreatePostResponse;
@@ -8,7 +9,7 @@ import com.example.codeconvoproject.entity.Category;
 import com.example.codeconvoproject.service.CategoryService;
 import com.example.codeconvoproject.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class PostApi {
 
        return createPostResponse;
     }
-    @GetMapping("/api/posts/{categoryName}/{postId}")
+    @GetMapping("/api/post/{categoryName}/{postId}")
     public ResponseEntity<ResponseDto<FetchPostResponse>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
         // categoryName, postId로 특정 게시글의 상세 정보를 조회합니다.
         FetchPostResponse fetchedPost = postService.fetchPost(categoryName,postId);
@@ -67,5 +68,22 @@ public class PostApi {
                     HttpStatus.NOT_FOUND
             );
         }
+    }
+
+    @GetMapping("/api/posts/{categoryName}/{pageNumber}")
+    public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts(@PathVariable String categoryName,
+                                                                      @PathVariable int pageNumber,
+                                                                      @RequestParam(defaultValue = "10") int size) {
+        // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
+        Category category = categoryService.getCategory(categoryName);
+        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
+        PageRequest pageRequest = PageRequest.of(pageNumber, size);
+        // categoryId의 게시글 목록 데이터를 가져옵니다.
+        FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), pageRequest);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 목록 조회 성공", fetchPostsResponse),
+                HttpStatus.OK
+        );
     }
 }

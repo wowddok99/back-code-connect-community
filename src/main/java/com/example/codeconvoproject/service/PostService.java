@@ -1,12 +1,17 @@
 package com.example.codeconvoproject.service;
 
+import com.example.codeconvoproject.dto.PostDto.FetchPostsResponse;
 import com.example.codeconvoproject.dto.PostDto.FetchPostResponse;
 import com.example.codeconvoproject.dto.PostDto.CreatePostResponse;
 import com.example.codeconvoproject.dto.PostDto.CreatePostRequest;
 import com.example.codeconvoproject.entity.Post;
 import com.example.codeconvoproject.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -22,8 +27,8 @@ public class PostService {
                 .title(postPs.getTitle())
                 .contents(postPs.getContents())
                 .writer(postPs.getWriter())
-                .createAt(postPs.getCreatedAt())
-                .updateAt(postPs.getUpdatedAt())
+                .createdAt(postPs.getCreatedAt())
+                .updatedAt(postPs.getUpdatedAt())
                 .build();
     }
 
@@ -69,5 +74,26 @@ public class PostService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public FetchPostsResponse fetchPosts(Long categoryId, PageRequest pageRequest){
+        Page<Post> fetchedPosts = postRepository.findByCategoryId(categoryId, pageRequest);
+
+        List<FetchPostsResponse.PostsResponse> posts = fetchedPosts.get()
+                .map(post -> FetchPostsResponse.PostsResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .writer(post.getWriter())
+                        .createdAt(post.getCreatedAt())
+                        .updatedAt(post.getUpdatedAt())
+                        .build())
+                .toList();
+
+        return FetchPostsResponse.builder()
+                .posts(posts)
+                .currentPage(fetchedPosts.getNumber())
+                .totalPages(fetchedPosts.getTotalPages())
+                .totalElements(fetchedPosts.getTotalElements())
+                .build();
     }
 }
