@@ -31,17 +31,17 @@ public class PostApi {
 
         // 게시글 생성
         CreatePostResponse createPostResponse = postService.createPost(
-               CreatePostRequest.builder()
-               .title(createPostRequestDto.title())
-               .contents(createPostRequestDto.contents())
-               .writer(createPostRequestDto.writer())
-               .youtubeUrl(createPostRequestDto.youtubeUrl())
-               .likeCount(createPostRequestDto.likeCount())
-               .dislikeCount(createPostRequestDto.dislikeCount())
-               .images(createPostRequestDto.images())
-               .postAddress(createPostRequestDto.postAddress())
-               .category(category)
-               .build()
+                CreatePostRequest.builder()
+                        .title(createPostRequestDto.title())
+                        .contents(createPostRequestDto.contents())
+                        .writer(createPostRequestDto.writer())
+                        .youtubeUrl(createPostRequestDto.youtubeUrl())
+                        .likeCount(createPostRequestDto.likeCount())
+                        .dislikeCount(createPostRequestDto.dislikeCount())
+                        .images(createPostRequestDto.images())
+                        .postAddress(createPostRequestDto.postAddress())
+                        .category(category)
+                        .build()
         );
 
        return new ResponseEntity<>(
