@@ -46,8 +46,11 @@ public class PostApi {
     }
     @GetMapping("/api/post/{categoryName}/{postId}")
     public ResponseEntity<ResponseDto<FetchPostResponse>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
-        // categoryName, postId로 특정 게시글의 상세 정보를 조회합니다.
-        FetchPostResponse fetchedPost = postService.fetchPost(categoryName,postId);
+        // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
+        Category category = categoryService.getCategory(categoryName);
+
+        // categoryId, postId로 특정 게시글 단건 데이터를 조회합니다.
+        FetchPostResponse fetchedPost = postService.fetchPost(category.getId(), postId);
 
         // postId로 특정 게시글의 상세 정보를 조회합니다.
         FetchPostResponse fetchedPostById = postService.fetchPostById(postId);

@@ -32,10 +32,10 @@ public class PostService {
                 .build();
     }
 
-    public FetchPostResponse fetchPost(String categoryName, Long postId) {
+    public FetchPostResponse fetchPost(Long categoryId, Long postId) {
         try {
-            Post fetchedPost = postRepository.findByCategoryNameAndId(categoryName,postId)
-                    .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+            Post fetchedPost = postRepository.findByCategoryIdAndId(categoryId, postId)
+                    .orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
 
             return FetchPostResponse.builder()
                     .id(fetchedPost.getId())
@@ -57,7 +57,7 @@ public class PostService {
     public FetchPostResponse fetchPostById(Long postId) {
         try {
             Post fetchedPostById = postRepository.findById(postId)
-                    .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                    .orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
 
             return FetchPostResponse.builder()
                     .id(fetchedPostById.getId())

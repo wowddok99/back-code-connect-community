@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Optional<Post> findByCategoryNameAndId(String categoryName, Long id);
-    Page<Post> findByCategoryId(Long id, PageRequest pageRequest);
+    Optional<Post> findByCategoryIdAndId(Long categoryId, Long postId);
+    Page<Post> findByCategoryId(Long categoryId, PageRequest pageRequest);
 }
