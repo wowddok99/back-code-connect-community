@@ -1,5 +1,6 @@
 package com.example.codeconvoproject.api;
 
+import com.example.codeconvoproject.dto.PostDto.FetchPostResponse.CategoryResponse;
 import com.example.codeconvoproject.dto.PostDto.FetchPostsResponse;
 import com.example.codeconvoproject.dto.PostDto.FetchPostResponse;
 import com.example.codeconvoproject.dto.PostDto.CreatePostRequest;
@@ -50,7 +51,7 @@ public class PostApi {
     }
 
     @GetMapping("/api/post/{categoryName}/{postId}")
-    public ResponseEntity<ResponseDto<FetchPostResponse>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<?>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
 
@@ -61,8 +62,7 @@ public class PostApi {
         FetchPostResponse fetchedPostById = postService.fetchPostById(postId);
 
         if (fetchedPost == null && fetchedPostById != null) {
-            // 카테고리 이름만 담아서 반환
-            FetchPostResponse categoryResponse = FetchPostResponse.builder()
+            CategoryResponse categoryResponse = CategoryResponse.builder()
                     .categoryName(fetchedPostById.categoryName())
                     .build();
 

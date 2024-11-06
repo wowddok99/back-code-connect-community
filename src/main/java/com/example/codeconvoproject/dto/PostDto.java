@@ -59,7 +59,14 @@ public record PostDto(
             List<String> images,
             PostAddress postAddress,
             String categoryName
-    ) {}
+    ) {
+        @Builder
+        public record CategoryResponse(
+                String categoryName
+        ) {
+
+        }
+    }
 
     @Builder
     public record FetchPostsResponse(
