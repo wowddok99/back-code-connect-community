@@ -5,6 +5,7 @@ import com.example.codeconvoproject.dto.PostDto.FetchPostResponse;
 import com.example.codeconvoproject.dto.PostDto.CreatePostRequest;
 import com.example.codeconvoproject.dto.PostDto.CreatePostResponse;
 import com.example.codeconvoproject.dto.ResponseDto;
+import com.example.codeconvoproject.dto.ResponseDto.Status;
 import com.example.codeconvoproject.entity.Category;
 import com.example.codeconvoproject.service.CategoryService;
 import com.example.codeconvoproject.service.PostService;
@@ -21,7 +22,7 @@ public class PostApi {
     private final CategoryService categoryService;
 
     @PostMapping("/api/posts/{categoryName}")
-    public CreatePostResponse createPost(@PathVariable String categoryName,
+    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost(@PathVariable String categoryName,
                                          @RequestBody CreatePostRequest createPostRequestDto) {
 
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다
@@ -42,8 +43,12 @@ public class PostApi {
                .build()
         );
 
-       return createPostResponse;
+       return new ResponseEntity<>(
+               new ResponseDto<>(Status.SUCCESS, "게시글 등록 성공", createPostResponse),
+               HttpStatus.OK
+       );
     }
+
     @GetMapping("/api/post/{categoryName}/{postId}")
     public ResponseEntity<ResponseDto<FetchPostResponse>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
@@ -56,18 +61,23 @@ public class PostApi {
         FetchPostResponse fetchedPostById = postService.fetchPostById(postId);
 
         if (fetchedPost == null && fetchedPostById != null) {
+            // 카테고리 이름만 담아서 반환
+            FetchPostResponse categoryResponse = FetchPostResponse.builder()
+                    .categoryName(fetchedPostById.categoryName())
+                    .build();
+
             return new ResponseEntity<>(
-                    new ResponseDto<>(ResponseDto.Status.FAILURE, "게시글 조회 실패: 게시글은 존재하지만, 카테고리가 일치하지 않습니다.", fetchedPostById),
+                    new ResponseDto<>(Status.FAILURE, "게시글 조회 실패: 게시글은 존재하지만, 카테고리가 일치하지 않습니다.", categoryResponse),
                     HttpStatus.NOT_FOUND
             );
         } else if (fetchedPost != null) {
             return new ResponseEntity<>(
-                    new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 조회 성공", fetchedPost),
+                    new ResponseDto<>(Status.SUCCESS, "게시글 조회 성공", fetchedPost),
                     HttpStatus.OK
             );
         } else {
             return new ResponseEntity<>(
-                    new ResponseDto<>(ResponseDto.Status.FAILURE, "게시글 조회 실패: 존재하지 않는 게시글입니다.", null),
+                    new ResponseDto<>(Status.FAILURE, "게시글 조회 실패: 존재하지 않는 게시글입니다.", null),
                     HttpStatus.NOT_FOUND
             );
         }
@@ -85,7 +95,7 @@ public class PostApi {
         FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), pageRequest);
 
         return new ResponseEntity<>(
-                new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 목록 조회 성공", fetchPostsResponse),
+                new ResponseDto<>(Status.SUCCESS, "게시글 목록 조회 성공", fetchPostsResponse),
                 HttpStatus.OK
         );
     }
