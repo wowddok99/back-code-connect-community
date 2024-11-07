@@ -1,10 +1,7 @@
 package com.example.codeconvoproject.api;
 
+import com.example.codeconvoproject.dto.PostDto.*;
 import com.example.codeconvoproject.dto.PostDto.FetchPostResponse.CategoryResponse;
-import com.example.codeconvoproject.dto.PostDto.FetchPostsResponse;
-import com.example.codeconvoproject.dto.PostDto.FetchPostResponse;
-import com.example.codeconvoproject.dto.PostDto.CreatePostRequest;
-import com.example.codeconvoproject.dto.PostDto.CreatePostResponse;
 import com.example.codeconvoproject.dto.ResponseDto;
 import com.example.codeconvoproject.dto.ResponseDto.Status;
 import com.example.codeconvoproject.entity.Category;
@@ -24,8 +21,7 @@ public class PostApi {
 
     @PostMapping("/api/posts/{categoryName}")
     public ResponseEntity<ResponseDto<CreatePostResponse>> createPost(@PathVariable String categoryName,
-                                         @RequestBody CreatePostRequest createPostRequestDto) {
-
+                                                                      @RequestBody CreatePostRequest createPostRequestDto) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다
         Category category = categoryService.getCategory(categoryName);
 
@@ -48,6 +44,17 @@ public class PostApi {
                new ResponseDto<>(Status.SUCCESS, "게시글 등록 성공", createPostResponse),
                HttpStatus.OK
        );
+    }
+
+    @PutMapping("/api/posts/{postId}")
+    public ResponseEntity<ResponseDto<UpdatePostResponse>> updatePost(@PathVariable Long postId,
+                                                                      @RequestBody UpdatePostRequest updatePostRequest) {
+        UpdatePostResponse updatePostResponse = postService.updatePost(postId, updatePostRequest);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>(Status.SUCCESS, "게시글 수정 성공", updatePostResponse),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/api/post/{categoryName}/{postId}")

@@ -1,11 +1,9 @@
 package com.example.codeconvoproject.service;
 
-import com.example.codeconvoproject.dto.PostDto.FetchPostsResponse;
-import com.example.codeconvoproject.dto.PostDto.FetchPostResponse;
-import com.example.codeconvoproject.dto.PostDto.CreatePostResponse;
-import com.example.codeconvoproject.dto.PostDto.CreatePostRequest;
+import com.example.codeconvoproject.dto.PostDto.*;
 import com.example.codeconvoproject.entity.Post;
 import com.example.codeconvoproject.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +21,36 @@ public class PostService {
         Post postPs = postRepository.save(post);
 
         return CreatePostResponse.builder()
+                .id(postPs.getId())
+                .title(postPs.getTitle())
+                .contents(postPs.getContents())
+                .writer(postPs.getWriter())
+                .createdAt(postPs.getCreatedAt())
+                .updatedAt(postPs.getUpdatedAt())
+                .build();
+    }
+
+    public UpdatePostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest) {
+        Post fetchedPost = postRepository.findById(postId).
+                orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
+
+        Post post = Post.builder()
+                .id(fetchedPost.getId())
+                .title(updatePostRequest.title())
+                .contents(updatePostRequest.contents())
+                .writer(updatePostRequest.writer())
+                .youtubeUrl(updatePostRequest.youtubeUrl())
+                .likeCount(updatePostRequest.likeCount())
+                .dislikeCount(updatePostRequest.dislikeCount())
+                .images(updatePostRequest.images())
+                .postAddress(updatePostRequest.postAddress())
+                .category(fetchedPost.getCategory())
+                .createdAt(fetchedPost.getCreatedAt())
+                .build();
+
+        Post postPs = postRepository.save(post);
+
+        return UpdatePostResponse.builder()
                 .id(postPs.getId())
                 .title(postPs.getTitle())
                 .contents(postPs.getContents())
