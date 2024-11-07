@@ -1,7 +1,10 @@
 package com.example.codeconvoproject.service;
 
 import com.example.codeconvoproject.dto.PostDto.*;
+import com.example.codeconvoproject.entity.Category;
 import com.example.codeconvoproject.entity.Post;
+import com.example.codeconvoproject.entity.PostAddress;
+import com.example.codeconvoproject.repository.PostAddressRepository;
 import com.example.codeconvoproject.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +18,22 @@ import java.util.List;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final PostAddressRepository postAddressRepository;
 
-    public CreatePostResponse createPost(CreatePostRequest createPostRequestDto) {
-        Post post = createPostRequestDto.toEntity();
+    public CreatePostResponse createPost(Category category, CreatePostRequest createPostRequestDto) {
+        Post post = CreatePostRequest.builder()
+                .title(createPostRequestDto.title())
+                .contents(createPostRequestDto.contents())
+                .writer(createPostRequestDto.writer())
+                .youtubeUrl(createPostRequestDto.youtubeUrl())
+                .likeCount(createPostRequestDto.likeCount())
+                .dislikeCount(createPostRequestDto.dislikeCount())
+                .images(createPostRequestDto.images())
+                .postAddress(createPostRequestDto.postAddress())
+                .category(category)
+                .build()
+                .toEntity();
+
         Post postPs = postRepository.save(post);
 
         return CreatePostResponse.builder()
@@ -34,6 +50,16 @@ public class PostService {
         Post fetchedPost = postRepository.findById(postId).
                 orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
 
+        PostAddress postAddress = PostAddress.builder()
+                .id(fetchedPost.getPostAddress().getId())
+                .zipcode(updatePostRequest.postAddress().getZipcode())
+                .address(updatePostRequest.postAddress().getAddress())
+                .addressDetail(updatePostRequest.postAddress().getAddressDetail())
+                .createdAt(updatePostRequest.postAddress().getCreatedAt())
+                .build();
+
+        postAddressRepository.save(postAddress);
+
         Post post = Post.builder()
                 .id(fetchedPost.getId())
                 .title(updatePostRequest.title())
@@ -43,7 +69,7 @@ public class PostService {
                 .likeCount(updatePostRequest.likeCount())
                 .dislikeCount(updatePostRequest.dislikeCount())
                 .images(updatePostRequest.images())
-                .postAddress(updatePostRequest.postAddress())
+                .postAddress(postAddress)
                 .category(fetchedPost.getCategory())
                 .createdAt(fetchedPost.getCreatedAt())
                 .build();

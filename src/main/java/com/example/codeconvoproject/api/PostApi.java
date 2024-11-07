@@ -25,20 +25,7 @@ public class PostApi {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다
         Category category = categoryService.getCategory(categoryName);
 
-        // 게시글 생성
-        CreatePostResponse createPostResponse = postService.createPost(
-                CreatePostRequest.builder()
-                        .title(createPostRequestDto.title())
-                        .contents(createPostRequestDto.contents())
-                        .writer(createPostRequestDto.writer())
-                        .youtubeUrl(createPostRequestDto.youtubeUrl())
-                        .likeCount(createPostRequestDto.likeCount())
-                        .dislikeCount(createPostRequestDto.dislikeCount())
-                        .images(createPostRequestDto.images())
-                        .postAddress(createPostRequestDto.postAddress())
-                        .category(category)
-                        .build()
-        );
+        CreatePostResponse createPostResponse = postService.createPost(category, createPostRequestDto);
 
        return new ResponseEntity<>(
                new ResponseDto<>(Status.SUCCESS, "게시글 등록 성공", createPostResponse),

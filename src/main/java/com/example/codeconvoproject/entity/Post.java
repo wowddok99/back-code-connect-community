@@ -54,4 +54,8 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public void setPostAddress(PostAddress postAddress) {
+        this.postAddress = postAddress;
+    }
 }
