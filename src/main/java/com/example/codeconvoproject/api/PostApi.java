@@ -93,4 +93,10 @@ public class PostApi {
                 HttpStatus.OK
         );
     }
+
+    @DeleteMapping("/api/post/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
 }

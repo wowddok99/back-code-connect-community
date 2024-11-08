@@ -157,4 +157,14 @@ public class PostService {
                 .totalElements(fetchedPosts.getTotalElements())
                 .build();
     }
+
+    public void deletePost(Long postId) {
+        if (!postRepository.existsById(postId)) {
+            throw new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다.");
+        }
+
+        // 게시글 삭제
+        postRepository.deleteById(postId);
+    }
+
 }
