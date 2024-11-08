@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -46,20 +47,25 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
     public UpdatePostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest) {
+        // 기존 게시물 조회, 게시물이 없으면 예외 발생
         Post fetchedPost = postRepository.findById(postId).
-                orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
+                orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
 
+        // 기존 게시물의 주소 정보를 수정하기 위해 PostAddress 객체 생성
         PostAddress postAddress = PostAddress.builder()
                 .id(fetchedPost.getPostAddress().getId())
                 .zipcode(updatePostRequest.postAddress().getZipcode())
                 .address(updatePostRequest.postAddress().getAddress())
                 .addressDetail(updatePostRequest.postAddress().getAddressDetail())
-                .createdAt(updatePostRequest.postAddress().getCreatedAt())
+                .createdAt(fetchedPost.getPostAddress().getCreatedAt())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         postAddressRepository.save(postAddress);
 
+        // 기존 게시물의 정보를 업데이트하기 위해 Post 객체 생성
         Post post = Post.builder()
                 .id(fetchedPost.getId())
                 .title(updatePostRequest.title())
@@ -72,6 +78,7 @@ public class PostService {
                 .postAddress(postAddress)
                 .category(fetchedPost.getCategory())
                 .createdAt(fetchedPost.getCreatedAt())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         Post postPs = postRepository.save(post);
