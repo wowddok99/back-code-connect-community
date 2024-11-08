@@ -44,7 +44,7 @@ public class PostApi {
         );
     }
 
-    @GetMapping("/api/post/{categoryName}/{postId}")
+    @GetMapping("/api/posts/{categoryName}/{postId}")
     public ResponseEntity<ResponseDto<?>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
@@ -77,9 +77,9 @@ public class PostApi {
         }
     }
 
-    @GetMapping("/api/posts/{categoryName}/{pageNumber}")
+    @GetMapping("/api/posts/{categoryName}")
     public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts(@PathVariable String categoryName,
-                                                                      @PathVariable int pageNumber,
+                                                                      @RequestParam(defaultValue = "0") int pageNumber,
                                                                       @RequestParam(defaultValue = "10") int size) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
@@ -94,7 +94,7 @@ public class PostApi {
         );
     }
 
-    @DeleteMapping("/api/post/{postId}")
+    @DeleteMapping("/api/posts/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build(); // 204 No Content
