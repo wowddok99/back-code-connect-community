@@ -30,7 +30,7 @@ public record PostDto(
                     .youtubeUrl(this.youtubeUrl)
                     .likeCount(this.likeCount)
                     .dislikeCount(this.dislikeCount)
-                    .images(this.images)
+                    .imagePathList(this.images)
                     .postAddress((this.postAddress))
                     .category(this.category)
                     .build();

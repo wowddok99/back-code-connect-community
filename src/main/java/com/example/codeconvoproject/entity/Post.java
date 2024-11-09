@@ -38,8 +38,8 @@ public class Post {
     private int dislikeCount;
 
     @ElementCollection
-    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
-    private List<String> images;
+    @CollectionTable(name = "post_image_path_list", joinColumns = @JoinColumn(name = "post_id"))
+    private List<String> imagePathList;
 
     @CreatedDate
     private LocalDateTime createdAt;

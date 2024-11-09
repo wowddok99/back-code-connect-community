@@ -74,7 +74,7 @@ public class PostService {
                 .youtubeUrl(updatePostRequest.youtubeUrl())
                 .likeCount(updatePostRequest.likeCount())
                 .dislikeCount(updatePostRequest.dislikeCount())
-                .images(updatePostRequest.images())
+                .imagePathList(updatePostRequest.images())
                 .postAddress(postAddress)
                 .category(fetchedPost.getCategory())
                 .createdAt(fetchedPost.getCreatedAt())
@@ -106,7 +106,7 @@ public class PostService {
                     .youtubeUrl(fetchedPost.getYoutubeUrl())
                     .likeCount(fetchedPost.getLikeCount())
                     .dislikeCount(fetchedPost.getDislikeCount())
-                    .images(fetchedPost.getImages())
+                    .images(fetchedPost.getImagePathList())
                     .postAddress(fetchedPost.getPostAddress())
                     .categoryName(fetchedPost.getCategory().getName())
                     .build();
@@ -128,7 +128,7 @@ public class PostService {
                     .youtubeUrl(fetchedPostById.getYoutubeUrl())
                     .likeCount(fetchedPostById.getLikeCount())
                     .dislikeCount(fetchedPostById.getDislikeCount())
-                    .images(fetchedPostById.getImages())
+                    .images(fetchedPostById.getImagePathList())
                     .postAddress(fetchedPostById.getPostAddress())
                     .categoryName(fetchedPostById.getCategory().getName())
                     .build();
