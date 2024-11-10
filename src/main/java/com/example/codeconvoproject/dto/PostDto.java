@@ -18,7 +18,7 @@ public record PostDto(
             String youtubeUrl,
             int likeCount,
             int dislikeCount,
-            List<String> images,
+            List<String> imagePathList,
             PostAddress postAddress,
             Category category
     ) {
@@ -30,7 +30,7 @@ public record PostDto(
                     .youtubeUrl(this.youtubeUrl)
                     .likeCount(this.likeCount)
                     .dislikeCount(this.dislikeCount)
-                    .imagePathList(this.images)
+                    .imagePathList(this.imagePathList)
                     .postAddress((this.postAddress))
                     .category(this.category)
                     .build();
@@ -55,7 +55,7 @@ public record PostDto(
             String youtubeUrl,
             int likeCount,
             int dislikeCount,
-            List<String> images,
+            List<String> imagePathList,
             PostAddress postAddress,
             Category category
     ) {}
@@ -79,7 +79,7 @@ public record PostDto(
             String youtubeUrl,
             int likeCount,
             int dislikeCount,
-            List<String> images,
+            List<String> imagePathList,
             PostAddress postAddress,
             String categoryName
     ) {
