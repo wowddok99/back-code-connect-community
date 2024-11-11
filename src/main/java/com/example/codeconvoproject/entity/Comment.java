@@ -25,7 +25,7 @@ public class Comment {
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    private String contents;
 
     @Column(nullable = false)
     private String author;

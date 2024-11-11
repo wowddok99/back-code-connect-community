@@ -9,8 +9,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 @Getter
@@ -25,7 +23,7 @@ public class Reply {
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    private String contents;
 
     @Column(nullable = false)
     private String author;
