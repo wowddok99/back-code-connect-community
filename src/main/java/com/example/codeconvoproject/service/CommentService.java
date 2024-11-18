@@ -1,9 +1,6 @@
 package com.example.codeconvoproject.service;
 
-import com.example.codeconvoproject.dto.CommentDto.CreateReplyRequest;
-import com.example.codeconvoproject.dto.CommentDto.CreateReplyResponse;
-import com.example.codeconvoproject.dto.CommentDto.CreateCommentResponse;
-import com.example.codeconvoproject.dto.CommentDto.CreateCommentRequest;
+import com.example.codeconvoproject.dto.CommentDto.*;
 import com.example.codeconvoproject.entity.Comment;
 import com.example.codeconvoproject.entity.Post;
 import com.example.codeconvoproject.entity.Reply;
@@ -35,6 +32,23 @@ public class CommentService {
                 .contents(postCommentPs.getContents())
                 .createdAt(postCommentPs.getCreatedAt())
                 .updatedAt(postCommentPs.getUpdatedAt())
+                .build();
+    }
+
+    public UpdateCommentResponse updatePostComment(Long commentId, UpdateCommentRequest updateCommentRequest) {
+        Comment fetchedComment = commentRepository.findById(commentId).
+                orElseThrow(() -> new RuntimeException("commentId에 해당하는 댓글이 존재하지 않습니다."));
+
+        Comment comment = updateCommentRequest.toEntity(fetchedComment);
+
+        Comment commentPs = commentRepository.save(comment);
+
+        return UpdateCommentResponse.builder()
+                .id(commentPs.getId())
+                .author(commentPs.getAuthor())
+                .contents(commentPs.getContents())
+                .createdAt(commentPs.getCreatedAt())
+                .updatedAt(commentPs.getUpdatedAt())
                 .build();
     }
 

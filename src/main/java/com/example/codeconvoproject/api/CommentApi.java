@@ -1,19 +1,13 @@
 package com.example.codeconvoproject.api;
 
-import com.example.codeconvoproject.dto.CommentDto.CreateReplyRequest;
-import com.example.codeconvoproject.dto.CommentDto.CreateReplyResponse;
-import com.example.codeconvoproject.dto.CommentDto.CreateCommentResponse;
-import com.example.codeconvoproject.dto.CommentDto.CreateCommentRequest;
+import com.example.codeconvoproject.dto.CommentDto.*;
 import com.example.codeconvoproject.dto.ResponseDto;
 import com.example.codeconvoproject.dto.ResponseDto.Status;
 import com.example.codeconvoproject.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,6 +21,17 @@ public class CommentApi {
 
         return new ResponseEntity<>(
                 new ResponseDto<>(Status.SUCCESS, "게시글 댓글 등록 성공", createCommentResponse),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/api/comments/{commentId}")
+    public ResponseEntity<ResponseDto<UpdateCommentResponse>> updatePostComment(@PathVariable Long commentId,
+                                               @RequestBody UpdateCommentRequest updateCommentRequest) {
+        UpdateCommentResponse updateCommentResponse = commentService.updatePostComment(commentId, updateCommentRequest);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>(Status.SUCCESS, "댓글 수정 성공", updateCommentResponse),
                 HttpStatus.OK
         );
     }

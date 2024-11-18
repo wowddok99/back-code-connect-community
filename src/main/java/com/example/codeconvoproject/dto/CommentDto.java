@@ -57,4 +57,31 @@ public record CommentDto() {
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {}
+
+    @Builder
+    public record UpdateCommentRequest(
+            String author,
+            String contents
+    ) {
+        public Comment toEntity(Comment comment) {
+            return Comment.builder()
+                    .id(comment.getId())
+                    .author(this.author)
+                    .contents(this.contents)
+                    .createdAt(comment.getCreatedAt())
+                    .updatedAt(LocalDateTime.now())
+                    .post(comment.getPost()) // post: nullable = false
+                    .replies(comment.getReplies()) // 댓글의 답글(replies)을 유지하여 참조가 끊어지지 않아야 함
+                    .build();
+        }
+    }
+
+    @Builder
+    public record UpdateCommentResponse(
+            Long id,
+            String author,
+            String contents,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {}
 }
