@@ -84,4 +84,31 @@ public record CommentDto() {
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {}
+
+    @Builder
+    public record UpdateReplyRequest(
+            String author,
+            String contents
+    ) {
+        public Reply toEntity(Reply reply) {
+            return Reply.builder()
+                    .id(reply.getId())
+                    .author(this.author)
+                    .contents(this.contents)
+                    .createdAt(reply.getCreatedAt())
+                    .updatedAt(LocalDateTime.now())
+                    .comment(reply.getComment()) // comment: nullable = false
+                    .build();
+        }
+    }
+
+    @Builder
+    public record UpdateReplyResponse(
+            Long id,
+            String author,
+            String contents,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {}
+
 }

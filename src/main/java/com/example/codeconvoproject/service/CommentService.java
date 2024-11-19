@@ -17,8 +17,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
 
-    public CreateCommentResponse createPostComment(Long postId,
-                                                   CreateCommentRequest createCommentRequest) {
+    public CreateCommentResponse createComment(Long postId,
+                                               CreateCommentRequest createCommentRequest) {
         Post fetchedPost = postRepository.findById(postId).
                 orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
 
@@ -35,7 +35,7 @@ public class CommentService {
                 .build();
     }
 
-    public UpdateCommentResponse updatePostComment(Long commentId, UpdateCommentRequest updateCommentRequest) {
+    public UpdateCommentResponse updateComment(Long commentId, UpdateCommentRequest updateCommentRequest) {
         Comment fetchedComment = commentRepository.findById(commentId).
                 orElseThrow(() -> new RuntimeException("commentId에 해당하는 댓글이 존재하지 않습니다."));
 
@@ -52,7 +52,7 @@ public class CommentService {
                 .build();
     }
 
-    public CreateReplyResponse createCommentReply(Long commentId, CreateReplyRequest createReplyRequest) {
+    public CreateReplyResponse createReply(Long commentId, CreateReplyRequest createReplyRequest) {
         Comment fetchedComment = commentRepository.findById(commentId).
                 orElseThrow(() -> new RuntimeException("commentId에 해당하는 댓글이 존재하지 않습니다."));
 
@@ -66,6 +66,23 @@ public class CommentService {
                 .contents(commentReplyPs.getContents())
                 .createdAt(commentReplyPs.getCreatedAt())
                 .updatedAt(commentReplyPs.getUpdatedAt())
+                .build();
+    }
+
+    public UpdateReplyResponse updateReply(Long replyId, UpdateReplyRequest updateReplyRequest) {
+        Reply fetchedReply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("replyId에 해당하는 대댓글이 존재하지 않습니다."));
+
+        Reply reply = updateReplyRequest.toEntity(fetchedReply);
+
+        Reply replyPs = replyRepository.save(reply);
+
+        return UpdateReplyResponse.builder()
+                .id(replyPs.getId())
+                .author(replyPs.getAuthor())
+                .contents(replyPs.getContents())
+                .createdAt(replyPs.getCreatedAt())
+                .updatedAt(replyPs.getUpdatedAt())
                 .build();
     }
 }
