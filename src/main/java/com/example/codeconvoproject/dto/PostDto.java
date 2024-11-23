@@ -85,19 +85,18 @@ public record PostDto(
 
     @Builder
     public record FetchPostsResponse(
-        List<PostsResponse> posts,
+        List<FetchedPostDto> posts,
         int currentPage,
         int totalPages,
         Long totalElements
     ) {
         @Builder
-        public record PostsResponse(
+        public record FetchedPostDto(
                 Long id,
                 String title,
                 String writer,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt
-
         ) {}
     }
 }

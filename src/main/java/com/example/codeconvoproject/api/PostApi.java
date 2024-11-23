@@ -83,10 +83,9 @@ public class PostApi {
                                                                       @RequestParam(defaultValue = "10") int size) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
-        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
-        PageRequest pageRequest = PageRequest.of(pageNumber, size);
+
         // categoryId의 게시글 목록 데이터를 가져옵니다.
-        FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), pageRequest);
+        FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), pageNumber, size);
 
         return new ResponseEntity<>(
                 new ResponseDto<>(Status.SUCCESS, "게시글 목록 조회 성공", fetchPostsResponse),
