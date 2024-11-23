@@ -16,8 +16,6 @@ public record PostDto(
             String contents,
             String writer,
             String youtubeUrl,
-            int likeCount,
-            int dislikeCount,
             List<String> imagePathList,
             PostAddress postAddress,
             Category category
@@ -28,8 +26,6 @@ public record PostDto(
                     .contents(this.contents)
                     .writer(this.writer)
                     .youtubeUrl(this.youtubeUrl)
-                    .likeCount(this.likeCount)
-                    .dislikeCount(this.dislikeCount)
                     .imagePathList(this.imagePathList)
                     .postAddress((this.postAddress))
                     .category(this.category)
@@ -53,8 +49,6 @@ public record PostDto(
             String contents,
             String writer,
             String youtubeUrl,
-            int likeCount,
-            int dislikeCount,
             List<String> imagePathList,
             PostAddress postAddress,
             Category category
