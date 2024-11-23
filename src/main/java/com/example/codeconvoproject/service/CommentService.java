@@ -1,5 +1,6 @@
 package com.example.codeconvoproject.service;
 
+import com.example.codeconvoproject.dto.CommentDto.FetchCommentsResponse.*;
 import com.example.codeconvoproject.dto.CommentDto.*;
 import com.example.codeconvoproject.entity.Comment;
 import com.example.codeconvoproject.entity.Post;
@@ -8,7 +9,12 @@ import com.example.codeconvoproject.repository.CommentRepository;
 import com.example.codeconvoproject.repository.PostRepository;
 import com.example.codeconvoproject.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -49,6 +55,33 @@ public class CommentService {
                 .contents(commentPs.getContents())
                 .createdAt(commentPs.getCreatedAt())
                 .updatedAt(commentPs.getUpdatedAt())
+                .build();
+    }
+
+    public FetchCommentsResponse fetchComments(Long postId, int pageNumber, int size) {
+        // Sort 객체를 생성하여 정렬 기준을 설정합니다.
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+
+        Page<Comment> fetchedComments = commentRepository.findByPostId(postId, pageRequest);
+
+        List<FetchedComment> comments = fetchedComments.get()
+                .map(comment -> FetchedComment.builder()
+                        .id(comment.getId())
+                        .author(comment.getAuthor())
+                        .contents(comment.getContents())
+                        .createdAt(comment.getCreatedAt())
+                        .updatedAt(comment.getUpdatedAt())
+                        .build())
+                .toList();
+
+        return FetchCommentsResponse.builder()
+                .posts(comments)
+                .currentPage(fetchedComments.getNumber())
+                .totalPages(fetchedComments.getTotalPages())
+                .totalElements(fetchedComments.getTotalElements())
                 .build();
     }
 

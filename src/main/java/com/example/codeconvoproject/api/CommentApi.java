@@ -36,6 +36,18 @@ public class CommentApi {
         );
     }
 
+    @GetMapping("/api/posts/{postId}/comments")
+    public ResponseEntity<ResponseDto<FetchCommentsResponse>> fetchComments(@PathVariable Long postId,
+                                                       @RequestParam(defaultValue = "0") int pageNumber,
+                                                       @RequestParam(defaultValue = "10") int size) {
+        FetchCommentsResponse fetchCommentsResponse = commentService.fetchComments(postId, pageNumber, size);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>(Status.SUCCESS, "댓글 조회 성공", fetchCommentsResponse),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/api/comments/{commentId}/replies")
     public ResponseEntity<ResponseDto<CreateReplyResponse>> createReply(@PathVariable Long commentId,
                                                                         @RequestBody CreateReplyRequest createReplyRequest) {
@@ -49,7 +61,7 @@ public class CommentApi {
 
     @PutMapping("/api/replies/{replyId}")
     public ResponseEntity<ResponseDto<UpdateReplyResponse>> updateReply(@PathVariable Long replyId,
-                                         @RequestBody UpdateReplyRequest updateReplyRequest) {
+                                                                        @RequestBody UpdateReplyRequest updateReplyRequest) {
         UpdateReplyResponse updateReplyResponse = commentService.updateReply(replyId, updateReplyRequest);
 
         return new ResponseEntity<>(
@@ -57,5 +69,4 @@ public class CommentApi {
                 HttpStatus.OK
         );
     }
-
 }

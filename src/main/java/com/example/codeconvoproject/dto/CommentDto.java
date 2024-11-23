@@ -6,6 +6,7 @@ import com.example.codeconvoproject.entity.Reply;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record CommentDto() {
     @Builder
@@ -86,6 +87,23 @@ public record CommentDto() {
     ) {}
 
     @Builder
+    public record FetchCommentsResponse(
+            List<FetchedComment> posts,
+            int currentPage,
+            int totalPages,
+            Long totalElements
+    ) {
+        @Builder
+        public record FetchedComment(
+                Long id,
+                String author,
+                String contents,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt
+        ) {}
+    }
+
+    @Builder
     public record UpdateReplyRequest(
             String author,
             String contents
@@ -110,5 +128,4 @@ public record CommentDto() {
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {}
-
 }
