@@ -8,7 +8,6 @@ import com.example.codeconvoproject.entity.Category;
 import com.example.codeconvoproject.service.CategoryService;
 import com.example.codeconvoproject.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,5 +96,15 @@ public class PostApi {
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
+    @PostMapping("/api/posts/{postId}/likes")
+    public ResponseEntity<ResponseDto<LikePostResponse>> likePost(@PathVariable Long postId) {
+        LikePostResponse likePostResponse = postService.likePost(postId);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>(Status.SUCCESS, "좋아요 요청 성공", likePostResponse),
+                HttpStatus.OK
+        );
     }
 }

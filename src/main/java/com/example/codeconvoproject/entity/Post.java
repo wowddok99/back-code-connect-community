@@ -54,4 +54,14 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    // 더티 체킹을 위한 좋아요 수 설정 메서드
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    // 더티 체킹을 위한 싫어요 수 설정 메서드
+    public void setDislikeCount(int dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
 }

@@ -172,5 +172,17 @@ public class PostService {
         // 게시글 삭제
         postRepository.deleteById(postId);
     }
+    @Transactional
+    public LikePostResponse likePost(Long postId) {
+        Post fetchedPostById = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
+
+        // 더티 체킹에 의해 좋아요 수를 1 증가시킴
+        fetchedPostById.setLikeCount(fetchedPostById.getLikeCount() + 1);
+
+        return LikePostResponse.builder()
+                .likeCount(fetchedPostById.getLikeCount())
+                .build();
+    }
 
 }

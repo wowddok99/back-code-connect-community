@@ -99,4 +99,9 @@ public record PostDto(
                 LocalDateTime updatedAt
         ) {}
     }
+
+    @Builder
+    public record LikePostResponse(
+            int likeCount
+    ) {}
 }
