@@ -51,15 +51,6 @@ public record CommentDto() {
     }
 
     @Builder
-    public record CreateReplyResponse(
-            Long id,
-            String author,
-            String contents,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt
-    ) {}
-
-    @Builder
     public record UpdateCommentRequest(
             String author,
             String contents
@@ -104,6 +95,15 @@ public record CommentDto() {
     }
 
     @Builder
+    public record CreateReplyResponse(
+            Long id,
+            String author,
+            String contents,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {}
+
+    @Builder
     public record UpdateReplyRequest(
             String author,
             String contents
@@ -128,4 +128,21 @@ public record CommentDto() {
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {}
+
+    @Builder
+    public record FetchRepliesResponse(
+            List<FetchedReply> replies,
+            int currentPage,
+            int totalPages,
+            Long totalElements
+    ) {
+        @Builder
+        public record FetchedReply(
+                Long id,
+                String author,
+                String contents,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt
+        ) {}
+    }
 }

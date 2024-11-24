@@ -1,5 +1,6 @@
 package com.example.codeconvoproject.service;
 
+import com.example.codeconvoproject.dto.CommentDto.FetchRepliesResponse.*;
 import com.example.codeconvoproject.dto.CommentDto.FetchCommentsResponse.*;
 import com.example.codeconvoproject.dto.CommentDto.*;
 import com.example.codeconvoproject.entity.Comment;
@@ -116,6 +117,33 @@ public class CommentService {
                 .contents(replyPs.getContents())
                 .createdAt(replyPs.getCreatedAt())
                 .updatedAt(replyPs.getUpdatedAt())
+                .build();
+    }
+
+    public FetchRepliesResponse fetchReplies(Long commentId, int pageNumber, int size) {
+        // Sort 객체를 생성하여 정렬 기준을 설정합니다.
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+
+        Page<Reply> fetchedReplies = replyRepository.findByCommentId(commentId, pageRequest);
+
+        List<FetchedReply> replies = fetchedReplies.get()
+                .map(reply -> FetchedReply.builder()
+                        .id(reply.getId())
+                        .author(reply.getAuthor())
+                        .contents(reply.getContents())
+                        .createdAt(reply.getCreatedAt())
+                        .updatedAt(reply.getUpdatedAt())
+                        .build())
+                .toList();
+
+        return FetchRepliesResponse.builder()
+                .replies(replies)
+                .currentPage(fetchedReplies.getNumber())
+                .totalPages(fetchedReplies.getTotalPages())
+                .totalElements(fetchedReplies.getTotalElements())
                 .build();
     }
 }
