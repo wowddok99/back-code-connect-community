@@ -104,4 +104,9 @@ public record PostDto(
     public record LikePostResponse(
             int likeCount
     ) {}
+
+    @Builder
+    public record DislikePostResponse(
+            int dislikeCount
+    ) {}
 }

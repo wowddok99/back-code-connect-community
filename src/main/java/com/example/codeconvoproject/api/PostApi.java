@@ -107,4 +107,14 @@ public class PostApi {
                 HttpStatus.OK
         );
     }
+
+    @PostMapping("/api/posts/{postId}/dislikes")
+    public ResponseEntity<ResponseDto<DislikePostResponse>> dislikePost(@PathVariable Long postId) {
+        DislikePostResponse dislikePostResponse = postService.dislikePost(postId);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>(Status.SUCCESS, "싫어요 요청 성공", dislikePostResponse),
+                HttpStatus.OK
+        );
+    }
 }

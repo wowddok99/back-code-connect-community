@@ -185,4 +185,17 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
+    public DislikePostResponse dislikePost(Long postId) {
+        Post fetchedPostById = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
+
+        // 더티 체킹에 의해 싫어요 수를 1 증가시킴
+        fetchedPostById.setDislikeCount(fetchedPostById.getDislikeCount() + 1);
+
+        return DislikePostResponse.builder()
+                .dislikeCount(fetchedPostById.getDislikeCount())
+                .build();
+    }
+
 }
