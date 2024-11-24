@@ -71,7 +71,7 @@ public class CommentApi {
     }
 
     @GetMapping("/api/comments/{commentId}/replies")
-    public ResponseEntity<?> fetchReplies(@PathVariable Long commentId,
+    public ResponseEntity<ResponseDto<FetchRepliesResponse>> fetchReplies(@PathVariable Long commentId,
                                           @RequestParam(defaultValue = "0") int pageNumber,
                                           @RequestParam(defaultValue = "10") int size) {
        FetchRepliesResponse fetchRepliesResponse = commentService.fetchReplies(commentId, pageNumber, size);
