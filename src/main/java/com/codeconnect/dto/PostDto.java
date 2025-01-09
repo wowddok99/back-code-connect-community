@@ -15,6 +15,7 @@ public record PostDto(
             String title,
             String contents,
             String writer,
+            String password,
             String youtubeUrl,
             List<String> imagePathList,
             PostAddress postAddress,
@@ -25,6 +26,7 @@ public record PostDto(
                     .title(this.title)
                     .contents(this.contents)
                     .writer(this.writer)
+                    .password(this.password)
                     .youtubeUrl(this.youtubeUrl)
                     .imagePathList(this.imagePathList)
                     .postAddress((this.postAddress))

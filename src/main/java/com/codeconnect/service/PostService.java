@@ -28,6 +28,7 @@ public class PostService {
                 .title(createPostRequestDto.title())
                 .contents(createPostRequestDto.contents())
                 .writer(createPostRequestDto.writer())
+                .password(createPostRequestDto.password())
                 .youtubeUrl(createPostRequestDto.youtubeUrl())
                 .imagePathList(createPostRequestDto.imagePathList())
                 .postAddress(createPostRequestDto.postAddress())
