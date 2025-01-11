@@ -17,7 +17,12 @@ public class ImageService {
 
     public String[] save(MultipartFile[] images) throws IOException {
         String[] filePaths = new String[images.length];
+
         String extension = "";
+
+        // 현재 작업 디렉토리 가져오기
+        String basePath = System.getProperty("user.dir") + "\\uploads\\images\\";
+
         for (int i = 0; i < images.length; i++) {
             MultipartFile image = images[i];
             // 파일 이름 추출
@@ -28,8 +33,7 @@ public class ImageService {
                 extension = fileName.substring(fileName.lastIndexOf('.'));
             }
 
-            String fullPathName = "C:\\Users\\jse\\Desktop\\dev\\workspace-springboot\\codeconvo-project\\uploads\\images\\"
-                    + UUID.randomUUID().toString() + extension;
+            String fullPathName = basePath + UUID.randomUUID().toString() + extension;
             
             // 서버에 파일 저장
             image.transferTo(new File(fullPathName));
