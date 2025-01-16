@@ -21,7 +21,10 @@ public class ImageService {
         String extension = "";
 
         // 현재 작업 디렉토리 가져오기
-        String basePath = System.getProperty("user.dir") + "\\uploads\\images\\";
+        // String basePath = System.getProperty("user.dir") + "\\uploads\\images\\";
+
+        // 프론트(next.js) 프로젝트의 public 폴더에 저장
+        String basePath = "C:\\Users\\jse\\Desktop\\dev\\code-connect\\front-code-connect-community\\public\\uploads\\images\\";
 
         for (int i = 0; i < images.length; i++) {
             MultipartFile image = images[i];
