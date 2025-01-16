@@ -143,7 +143,7 @@ public class PostService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
 
         // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, size, sort);
 
         Page<Post> fetchedPosts = postRepository.findByCategoryId(categoryId, pageRequest);
 
@@ -159,7 +159,7 @@ public class PostService {
 
         return FetchPostsResponse.builder()
                 .posts(posts)
-                .currentPage(fetchedPosts.getNumber())
+                .currentPage(fetchedPosts.getNumber() + 1)
                 .totalPages(fetchedPosts.getTotalPages())
                 .totalElements(fetchedPosts.getTotalElements())
                 .build();
