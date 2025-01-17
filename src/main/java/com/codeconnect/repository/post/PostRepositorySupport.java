@@ -37,6 +37,15 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
                 .offset(pageable.getOffset()) // 현재 페이지의 오프셋 설정
                 .limit(pageable.getPageSize()); // 페이지 크기 설정
 
+        // pageable 정렬 조건 적용
+        pageable.getSort().forEach(order -> {
+            if (order.isAscending()) {
+                query.orderBy(post.createdAt.asc()); // createdAt 필드를 기준으로 오름차순 정렬
+            } else {
+                query.orderBy(post.createdAt.desc()); // createdAt 필드를 기준으로 내림차순 정렬
+            }
+        });
+
         // 결과 조회
         var result = query.fetch();
 

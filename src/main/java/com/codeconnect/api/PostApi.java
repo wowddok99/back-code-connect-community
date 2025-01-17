@@ -21,7 +21,7 @@ public class PostApi {
     private final CategoryService categoryService;
 
     @PostMapping("/api/posts/{categoryName}")
-    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost(
+    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost (
             @PathVariable String categoryName,
             @RequestBody CreatePostRequest createPostRequestDto
     ) {
@@ -37,7 +37,7 @@ public class PostApi {
     }
 
     @PutMapping("/api/posts/{postId}")
-    public ResponseEntity<ResponseDto<UpdatePostResponse>> updatePost(
+    public ResponseEntity<ResponseDto<UpdatePostResponse>> updatePost (
             @PathVariable Long postId,
             @RequestBody UpdatePostRequest updatePostRequest
     ) {
@@ -50,7 +50,7 @@ public class PostApi {
     }
 
     @GetMapping("/api/posts/{categoryName}/{postId}")
-    public ResponseEntity<ResponseDto<?>> fetchPost(
+    public ResponseEntity<ResponseDto<?>> fetchPost (
             @PathVariable String categoryName,
             @PathVariable Long postId
     ) {
@@ -86,7 +86,7 @@ public class PostApi {
     }
 
     @GetMapping("/api/posts/{categoryName}")
-    public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts(
+    public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts (
             @PathVariable String categoryName,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) LocalDateTime startDate,
@@ -106,13 +106,13 @@ public class PostApi {
     }
 
     @DeleteMapping("/api/posts/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+    public ResponseEntity<Void> deletePost (@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 
     @PostMapping("/api/posts/{postId}/likes")
-    public ResponseEntity<ResponseDto<LikePostResponse>> likePost(@PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<LikePostResponse>> likePost (@PathVariable Long postId) {
         LikePostResponse likePostResponse = postService.likePost(postId);
 
         return new ResponseEntity<>(
@@ -122,7 +122,7 @@ public class PostApi {
     }
 
     @PostMapping("/api/posts/{postId}/dislikes")
-    public ResponseEntity<ResponseDto<DislikePostResponse>> dislikePost(@PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<DislikePostResponse>> dislikePost (@PathVariable Long postId) {
         DislikePostResponse dislikePostResponse = postService.dislikePost(postId);
 
         return new ResponseEntity<>(
