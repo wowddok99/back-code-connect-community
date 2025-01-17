@@ -5,13 +5,13 @@ import com.codeconnect.dto.PostDto.FetchPostsResponse.FetchedPostDto;
 import com.codeconnect.dto.PostDto.*;
 import com.codeconnect.entity.Post;
 import com.codeconnect.entity.PostAddress;
-import com.codeconnect.repository.PostAddressRepository;
-import com.codeconnect.repository.PostRepository;
+import com.codeconnect.repository.post.PostRepositorySupport;
+import com.codeconnect.repository.postAddress.PostAddressRepository;
+import com.codeconnect.repository.post.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,9 +21,13 @@ import java.util.List;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final PostRepositorySupport postRepositorySupport;
     private final PostAddressRepository postAddressRepository;
 
-    public CreatePostResponse createPost(Category category, CreatePostRequest createPostRequestDto) {
+    public CreatePostResponse createPost (
+            Category category,
+            CreatePostRequest createPostRequestDto
+    ) {
         Post post = CreatePostRequest.builder()
                 .title(createPostRequestDto.title())
                 .contents(createPostRequestDto.contents())
@@ -49,7 +53,10 @@ public class PostService {
     }
 
     @Transactional
-    public UpdatePostResponse updatePost(Long postId, UpdatePostRequest updatePostRequest) {
+    public UpdatePostResponse updatePost (
+            Long postId,
+            UpdatePostRequest updatePostRequest
+    ) {
         // 기존 게시물 조회, 게시물이 없으면 예외 발생
         Post fetchedPost = postRepository.findById(postId).
                 orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
@@ -94,7 +101,10 @@ public class PostService {
                 .build();
     }
 
-    public FetchPostResponse fetchPost(Long categoryId, Long postId) {
+    public FetchPostResponse fetchPost (
+            Long categoryId,
+            Long postId
+    ) {
         try {
             Post fetchedPost = postRepository.findByCategoryIdAndId(categoryId, postId)
                     .orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
@@ -138,14 +148,14 @@ public class PostService {
         }
     }
 
-    public FetchPostsResponse fetchPosts(Long categoryId, int pageNumber, int size){
-        // Sort 객체를 생성하여 정렬 기준을 설정합니다.
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-
-        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
-        PageRequest pageRequest = PageRequest.of(pageNumber - 1, size, sort);
-
-        Page<Post> fetchedPosts = postRepository.findByCategoryId(categoryId, pageRequest);
+    public FetchPostsResponse fetchPosts (
+            Long categoryId,
+            String title,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Pageable pageable
+    ) {
+        Page<Post> fetchedPosts = postRepositorySupport.findByCategoryId(categoryId, title, startDate, endDate, pageable);
 
         List<FetchedPostDto> posts = fetchedPosts.get()
                 .map(post -> FetchedPostDto.builder()

@@ -1,4 +1,4 @@
-package com.codeconnect.repository;
+package com.codeconnect.repository.reply;
 
 import com.codeconnect.entity.Reply;
 import org.springframework.data.domain.Page;

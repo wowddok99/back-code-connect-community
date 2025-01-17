@@ -7,9 +7,12 @@ import com.codeconnect.service.PostService;
 import com.codeconnect.dto.PostDto.*;
 import com.codeconnect.dto.PostDto.FetchPostResponse.CategoryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,8 +21,10 @@ public class PostApi {
     private final CategoryService categoryService;
 
     @PostMapping("/api/posts/{categoryName}")
-    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost(@PathVariable String categoryName,
-                                                                      @RequestBody CreatePostRequest createPostRequestDto) {
+    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost(
+            @PathVariable String categoryName,
+            @RequestBody CreatePostRequest createPostRequestDto
+    ) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다
         Category category = categoryService.getCategory(categoryName);
 
@@ -32,8 +37,10 @@ public class PostApi {
     }
 
     @PutMapping("/api/posts/{postId}")
-    public ResponseEntity<ResponseDto<UpdatePostResponse>> updatePost(@PathVariable Long postId,
-                                                                      @RequestBody UpdatePostRequest updatePostRequest) {
+    public ResponseEntity<ResponseDto<UpdatePostResponse>> updatePost(
+            @PathVariable Long postId,
+            @RequestBody UpdatePostRequest updatePostRequest
+    ) {
         UpdatePostResponse updatePostResponse = postService.updatePost(postId, updatePostRequest);
 
         return new ResponseEntity<>(
@@ -43,7 +50,10 @@ public class PostApi {
     }
 
     @GetMapping("/api/posts/{categoryName}/{postId}")
-    public ResponseEntity<ResponseDto<?>> fetchPost(@PathVariable String categoryName, @PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<?>> fetchPost(
+            @PathVariable String categoryName,
+            @PathVariable Long postId
+    ) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
 
@@ -76,14 +86,18 @@ public class PostApi {
     }
 
     @GetMapping("/api/posts/{categoryName}")
-    public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts(@PathVariable String categoryName,
-                                                                      @RequestParam(defaultValue = "0") int pageNumber,
-                                                                      @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts(
+            @PathVariable String categoryName,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            Pageable pageable
+    ) {
         // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
 
         // categoryId의 게시글 목록 데이터를 가져옵니다.
-        FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), pageNumber, size);
+        FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), title, startDate, endDate, pageable);
 
         return new ResponseEntity<>(
                 new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 목록 조회 성공", fetchPostsResponse),

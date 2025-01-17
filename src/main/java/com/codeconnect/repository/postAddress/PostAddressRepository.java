@@ -1,4 +1,4 @@
-package com.codeconnect.repository;
+package com.codeconnect.repository.postAddress;
 
 import com.codeconnect.entity.PostAddress;
 import org.springframework.data.jpa.repository.JpaRepository;

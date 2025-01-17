@@ -1,7 +1,7 @@
 package com.codeconnect.service;
 
 import com.codeconnect.entity.Category;
-import com.codeconnect.repository.CategoryRepository;
+import com.codeconnect.repository.category.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

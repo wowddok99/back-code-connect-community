@@ -1,7 +1,7 @@
 package com.codeconnect.service;
 
 import com.codeconnect.entity.Image;
-import com.codeconnect.repository.ImageRepository;
+import com.codeconnect.repository.image.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

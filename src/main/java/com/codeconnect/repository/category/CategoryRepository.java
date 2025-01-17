@@ -1,4 +1,4 @@
-package com.codeconnect.repository;
+package com.codeconnect.repository.category;
 
 import com.codeconnect.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

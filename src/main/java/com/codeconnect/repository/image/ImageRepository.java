@@ -1,4 +1,4 @@
-package com.codeconnect.repository;
+package com.codeconnect.repository.image;
 
 import com.codeconnect.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
