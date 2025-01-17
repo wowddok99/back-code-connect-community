@@ -155,7 +155,7 @@ public class PostService {
             LocalDateTime endDate,
             Pageable pageable
     ) {
-        Page<Post> fetchedPosts = postRepositorySupport.findByCategoryId(categoryId, title, startDate, endDate, pageable);
+        Page<Post> fetchedPosts = postRepositorySupport.findByCategoryIdWithFilters(categoryId, title, startDate, endDate, pageable);
 
         List<FetchedPostDto> posts = fetchedPosts.get()
                 .map(post -> FetchedPostDto.builder()

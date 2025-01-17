@@ -19,7 +19,7 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
         super(Post.class);
     }
 
-    public Page<Post> findByCategoryId(
+    public Page<Post> findByCategoryIdWithFilters(
             Long categoryId,
             String title,
             LocalDateTime startDate,
