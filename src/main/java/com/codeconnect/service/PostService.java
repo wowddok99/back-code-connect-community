@@ -120,6 +120,8 @@ public class PostService {
                     .imagePathList(fetchedPost.getImagePathList())
                     .postAddress(fetchedPost.getPostAddress())
                     .categoryName(fetchedPost.getCategory().getName())
+                    .createdAt(fetchedPost.getCreatedAt())
+                    .updatedAt(fetchedPost.getUpdatedAt())
                     .build();
         } catch (Exception e) {
             return null;

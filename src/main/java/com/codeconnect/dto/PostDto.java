@@ -77,7 +77,9 @@ public record PostDto(
             int dislikeCount,
             List<String> imagePathList,
             PostAddress postAddress,
-            String categoryName
+            String categoryName,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {
         @Builder
         public record CategoryResponse(
