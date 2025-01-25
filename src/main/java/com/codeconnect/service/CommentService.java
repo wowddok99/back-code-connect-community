@@ -76,7 +76,7 @@ public class CommentService {
 
         return FetchCommentsResponse.builder()
                 .posts(comments)
-                .currentPage(fetchedComments.getNumber())
+                .currentPage(fetchedComments.getNumber() + 1)
                 .totalPages(fetchedComments.getTotalPages())
                 .totalElements(fetchedComments.getTotalElements())
                 .build();
@@ -131,7 +131,7 @@ public class CommentService {
 
         return FetchRepliesResponse.builder()
                 .replies(replies)
-                .currentPage(fetchedReplies.getNumber())
+                .currentPage(fetchedReplies.getNumber() + 1)
                 .totalPages(fetchedReplies.getTotalPages())
                 .totalElements(fetchedReplies.getTotalElements())
                 .build();
