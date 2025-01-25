@@ -12,12 +12,14 @@ public record CommentDto() {
     @Builder
     public record CreateCommentRequest(
             String author,
-            String contents
+            String contents,
+            String password
     ) {
         public Comment toEntity(Post post) {
             return Comment.builder()
                     .author(this.author)
                     .contents(this.contents)
+                    .password(this.password)
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .post(post)
@@ -30,6 +32,7 @@ public record CommentDto() {
             Long id,
             String author,
             String contents,
+            String password,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {}

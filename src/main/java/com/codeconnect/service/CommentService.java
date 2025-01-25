@@ -12,6 +12,7 @@ import com.codeconnect.repository.reply.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class CommentService {
                 .id(postCommentPs.getId())
                 .author(postCommentPs.getAuthor())
                 .contents(postCommentPs.getContents())
+                .password(postCommentPs.getPassword())
                 .createdAt(postCommentPs.getCreatedAt())
                 .updatedAt(postCommentPs.getUpdatedAt())
                 .build();
@@ -59,14 +61,8 @@ public class CommentService {
                 .build();
     }
 
-    public FetchCommentsResponse fetchComments(Long postId, int pageNumber, int size) {
-        // Sort 객체를 생성하여 정렬 기준을 설정합니다.
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-
-        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
-
-        Page<Comment> fetchedComments = commentRepository.findByPostId(postId, pageRequest);
+    public FetchCommentsResponse fetchComments(Long postId, Pageable pageable) {
+        Page<Comment> fetchedComments = commentRepository.findByPostId(postId, pageable);
 
         List<FetchedComment> comments = fetchedComments.get()
                 .map(comment -> FetchedComment.builder()
@@ -120,14 +116,8 @@ public class CommentService {
                 .build();
     }
 
-    public FetchRepliesResponse fetchReplies(Long commentId, int pageNumber, int size) {
-        // Sort 객체를 생성하여 정렬 기준을 설정합니다.
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-
-        // 페이지 번호와 페이지 크기를 사용하여 PageRequest 객체를 생성합니다.
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
-
-        Page<Reply> fetchedReplies = replyRepository.findByCommentId(commentId, pageRequest);
+    public FetchRepliesResponse fetchReplies(Long commentId, Pageable pageable) {
+        Page<Reply> fetchedReplies = replyRepository.findByCommentId(commentId, pageable);
 
         List<FetchedReply> replies = fetchedReplies.get()
                 .map(reply -> FetchedReply.builder()

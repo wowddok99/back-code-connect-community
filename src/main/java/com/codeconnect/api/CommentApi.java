@@ -5,6 +5,7 @@ import com.codeconnect.dto.CommentDto.*;
 import com.codeconnect.dto.ResponseDto;
 import com.codeconnect.dto.ResponseDto.Status;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +38,11 @@ public class CommentApi {
     }
 
     @GetMapping("/api/posts/{postId}/comments")
-    public ResponseEntity<ResponseDto<FetchCommentsResponse>> fetchComments(@PathVariable Long postId,
-                                                       @RequestParam(defaultValue = "0") int pageNumber,
-                                                       @RequestParam(defaultValue = "10") int size) {
-        FetchCommentsResponse fetchCommentsResponse = commentService.fetchComments(postId, pageNumber, size);
+    public ResponseEntity<ResponseDto<FetchCommentsResponse>> fetchComments (
+            @PathVariable Long postId,
+            Pageable pageable
+    ) {
+        FetchCommentsResponse fetchCommentsResponse = commentService.fetchComments(postId, pageable);
 
         return new ResponseEntity<>(
                 new ResponseDto<>(Status.SUCCESS, "댓글 조회 성공", fetchCommentsResponse),
@@ -71,10 +73,11 @@ public class CommentApi {
     }
 
     @GetMapping("/api/comments/{commentId}/replies")
-    public ResponseEntity<ResponseDto<FetchRepliesResponse>> fetchReplies(@PathVariable Long commentId,
-                                          @RequestParam(defaultValue = "0") int pageNumber,
-                                          @RequestParam(defaultValue = "10") int size) {
-       FetchRepliesResponse fetchRepliesResponse = commentService.fetchReplies(commentId, pageNumber, size);
+    public ResponseEntity<ResponseDto<FetchRepliesResponse>> fetchReplies (
+            @PathVariable Long commentId,
+            Pageable pageable
+    ) {
+       FetchRepliesResponse fetchRepliesResponse = commentService.fetchReplies(commentId, pageable);
 
         return new ResponseEntity<>(
                 new ResponseDto<>(Status.SUCCESS, "대댓글 조회 성공", fetchRepliesResponse),
