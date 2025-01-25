@@ -82,7 +82,7 @@ public record CommentDto() {
 
     @Builder
     public record FetchCommentsResponse(
-            List<FetchedComment> posts,
+            List<FetchedComment> comments,
             int currentPage,
             int totalPages,
             Long totalElements

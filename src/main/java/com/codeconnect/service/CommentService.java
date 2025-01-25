@@ -75,7 +75,7 @@ public class CommentService {
                 .toList();
 
         return FetchCommentsResponse.builder()
-                .posts(comments)
+                .comments(comments)
                 .currentPage(fetchedComments.getNumber() + 1)
                 .totalPages(fetchedComments.getTotalPages())
                 .totalElements(fetchedComments.getTotalElements())
