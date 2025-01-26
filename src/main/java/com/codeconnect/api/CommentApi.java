@@ -50,6 +50,13 @@ public class CommentApi {
         );
     }
 
+    @DeleteMapping("/api/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/api/comments/{commentId}/replies")
     public ResponseEntity<ResponseDto<CreateReplyResponse>> createReply(@PathVariable Long commentId,
                                                                         @RequestBody CreateReplyRequest createReplyRequest) {

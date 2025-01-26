@@ -9,6 +9,7 @@ import com.codeconnect.entity.Reply;
 import com.codeconnect.repository.comment.CommentRepository;
 import com.codeconnect.repository.post.PostRepository;
 import com.codeconnect.repository.reply.ReplyRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,6 +85,14 @@ public class CommentService {
                 .totalPages(fetchedComments.getTotalPages())
                 .totalElements(fetchedComments.getTotalElements())
                 .build();
+    }
+
+    public void deleteComment(Long commentId) {
+        if (!commentRepository.existsById(commentId)) {
+            throw new EntityNotFoundException("댓글이 존재하지 않습니다.");
+        }
+        // 댓글 삭제
+        commentRepository.deleteById(commentId);
     }
 
     public CreateReplyResponse createReply(Long commentId, CreateReplyRequest createReplyRequest) {
