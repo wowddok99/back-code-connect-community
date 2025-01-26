@@ -26,8 +26,10 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
 
-    public CreateCommentResponse createComment(Long postId,
-                                               CreateCommentRequest createCommentRequest) {
+    public CreateCommentResponse createComment(
+            Long postId,
+            CreateCommentRequest createCommentRequest
+    ) {
         Post fetchedPost = postRepository.findById(postId).
                 orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
 
@@ -45,7 +47,10 @@ public class CommentService {
                 .build();
     }
 
-    public UpdateCommentResponse updateComment(Long commentId, UpdateCommentRequest updateCommentRequest) {
+    public UpdateCommentResponse updateComment(
+            Long commentId,
+            UpdateCommentRequest updateCommentRequest
+    ) {
         Comment fetchedComment = commentRepository.findById(commentId).
                 orElseThrow(() -> new RuntimeException("commentId에 해당하는 댓글이 존재하지 않습니다."));
 
@@ -66,7 +71,10 @@ public class CommentService {
                 .build();
     }
 
-    public FetchCommentsResponse fetchComments(Long postId, Pageable pageable) {
+    public FetchCommentsResponse fetchComments(
+            Long postId,
+            Pageable pageable
+    ) {
         Page<Comment> fetchedComments = commentRepository.findByPostId(postId, pageable);
 
         List<FetchedComment> comments = fetchedComments.get()
@@ -87,15 +95,21 @@ public class CommentService {
                 .build();
     }
 
-    public void deleteComment(Long commentId) {
-        if (!commentRepository.existsById(commentId)) {
-            throw new EntityNotFoundException("댓글이 존재하지 않습니다.");
+    public void deleteComment(Long commentId, String password) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글이 존재하지 않습니다."));
+
+        if (!comment.getPassword().equals(password)) {
+            throw new SecurityException("비밀번호가 일치하지 않습니다.");
         }
-        // 댓글 삭제
+
         commentRepository.deleteById(commentId);
     }
 
-    public CreateReplyResponse createReply(Long commentId, CreateReplyRequest createReplyRequest) {
+    public CreateReplyResponse createReply(
+            Long commentId,
+            CreateReplyRequest createReplyRequest
+    ) {
         Comment fetchedComment = commentRepository.findById(commentId).
                 orElseThrow(() -> new RuntimeException("commentId에 해당하는 댓글이 존재하지 않습니다."));
 
@@ -112,7 +126,10 @@ public class CommentService {
                 .build();
     }
 
-    public UpdateReplyResponse updateReply(Long replyId, UpdateReplyRequest updateReplyRequest) {
+    public UpdateReplyResponse updateReply(
+            Long replyId,
+            UpdateReplyRequest updateReplyRequest
+    ) {
         Reply fetchedReply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("replyId에 해당하는 대댓글이 존재하지 않습니다."));
 
@@ -129,7 +146,10 @@ public class CommentService {
                 .build();
     }
 
-    public FetchRepliesResponse fetchReplies(Long commentId, Pageable pageable) {
+    public FetchRepliesResponse fetchReplies(
+            Long commentId,
+            Pageable pageable
+    ) {
         Page<Reply> fetchedReplies = replyRepository.findByCommentId(commentId, pageable);
 
         List<FetchedReply> replies = fetchedReplies.get()

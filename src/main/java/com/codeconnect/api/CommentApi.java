@@ -51,15 +51,20 @@ public class CommentApi {
     }
 
     @DeleteMapping("/api/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteComment(commentId);
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable Long commentId,
+            @RequestBody String password
+    ) {
+        commentService.deleteComment(commentId, password);
 
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/api/comments/{commentId}/replies")
-    public ResponseEntity<ResponseDto<CreateReplyResponse>> createReply(@PathVariable Long commentId,
-                                                                        @RequestBody CreateReplyRequest createReplyRequest) {
+    public ResponseEntity<ResponseDto<CreateReplyResponse>> createReply(
+            @PathVariable Long commentId,
+            @RequestBody CreateReplyRequest createReplyRequest
+    ) {
         CreateReplyResponse createReplyResponse = commentService.createReply(commentId, createReplyRequest);
 
         return new ResponseEntity<>(
@@ -69,8 +74,10 @@ public class CommentApi {
     }
 
     @PutMapping("/api/replies/{replyId}")
-    public ResponseEntity<ResponseDto<UpdateReplyResponse>> updateReply(@PathVariable Long replyId,
-                                                                        @RequestBody UpdateReplyRequest updateReplyRequest) {
+    public ResponseEntity<ResponseDto<UpdateReplyResponse>> updateReply(
+            @PathVariable Long replyId,
+            @RequestBody UpdateReplyRequest updateReplyRequest
+    ) {
         UpdateReplyResponse updateReplyResponse = commentService.updateReply(replyId, updateReplyRequest);
 
         return new ResponseEntity<>(
