@@ -56,13 +56,15 @@ public record CommentDto() {
     @Builder
     public record UpdateCommentRequest(
             String author,
-            String contents
+            String contents,
+            String password
     ) {
         public Comment toEntity(Comment comment) {
             return Comment.builder()
                     .id(comment.getId())
                     .author(this.author)
                     .contents(this.contents)
+                    .password(this.password)
                     .createdAt(comment.getCreatedAt())
                     .updatedAt(LocalDateTime.now())
                     .post(comment.getPost()) // post: nullable = false

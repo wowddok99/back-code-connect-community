@@ -48,8 +48,12 @@ public class CommentService {
         Comment fetchedComment = commentRepository.findById(commentId).
                 orElseThrow(() -> new RuntimeException("commentId에 해당하는 댓글이 존재하지 않습니다."));
 
-        Comment comment = updateCommentRequest.toEntity(fetchedComment);
+        // 비밀번호 검증
+        if (!fetchedComment.getPassword().equals(updateCommentRequest.password())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
+        Comment comment = updateCommentRequest.toEntity(fetchedComment);
         Comment commentPs = commentRepository.save(comment);
 
         return UpdateCommentResponse.builder()
