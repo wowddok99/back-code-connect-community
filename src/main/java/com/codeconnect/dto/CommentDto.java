@@ -64,7 +64,6 @@ public record CommentDto() {
                     .id(comment.getId())
                     .author(this.author)
                     .contents(this.contents)
-                    .password(this.password)
                     .createdAt(comment.getCreatedAt())
                     .updatedAt(LocalDateTime.now())
                     .post(comment.getPost()) // post: nullable = false
