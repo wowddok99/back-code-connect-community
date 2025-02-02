@@ -52,19 +52,7 @@ public class PostApi {
 
         FetchPostResponse fetchedPost = postService.fetchPost(category.getId(), postId);
 
-        FetchPostResponse fetchedPostById = postService.fetchPostById(postId);
-
-        if (fetchedPost == null && fetchedPostById != null) {
-            CategoryResponse categoryResponse = CategoryResponse.builder()
-                    .categoryName(fetchedPostById.categoryName())
-                    .build();
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(categoryResponse);
-        } else if (fetchedPost != null) {
-            return ResponseEntity.ok(fetchedPost);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(fetchedPost);
     }
 
 
