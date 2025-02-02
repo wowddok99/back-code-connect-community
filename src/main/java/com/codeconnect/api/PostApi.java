@@ -1,6 +1,5 @@
 package com.codeconnect.api;
 
-import com.codeconnect.dto.ResponseDto;
 import com.codeconnect.entity.Category;
 import com.codeconnect.service.CategoryService;
 import com.codeconnect.service.PostService;
@@ -21,46 +20,38 @@ public class PostApi {
     private final CategoryService categoryService;
 
     @PostMapping("/api/posts/{categoryName}")
-    public ResponseEntity<ResponseDto<CreatePostResponse>> createPost (
+    public ResponseEntity<CreatePostResponse> createPost (
             @PathVariable String categoryName,
             @RequestBody CreatePostRequest createPostRequestDto
     ) {
-        // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다
         Category category = categoryService.getCategory(categoryName);
 
         CreatePostResponse createPostResponse = postService.createPost(category, createPostRequestDto);
 
-       return new ResponseEntity<>(
-               new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 등록 성공", createPostResponse),
-               HttpStatus.OK
-       );
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(createPostResponse);
     }
 
     @PutMapping("/api/posts/{postId}")
-    public ResponseEntity<ResponseDto<UpdatePostResponse>> updatePost (
+    public ResponseEntity<UpdatePostResponse> updatePost (
             @PathVariable Long postId,
             @RequestBody UpdatePostRequest updatePostRequest
     ) {
         UpdatePostResponse updatePostResponse = postService.updatePost(postId, updatePostRequest);
 
-        return new ResponseEntity<>(
-                new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 수정 성공", updatePostResponse),
-                HttpStatus.OK
-        );
+        return ResponseEntity.ok(updatePostResponse);
     }
 
     @GetMapping("/api/posts/{categoryName}/{postId}")
-    public ResponseEntity<ResponseDto<?>> fetchPost (
+    public ResponseEntity<?> fetchPost (
             @PathVariable String categoryName,
             @PathVariable Long postId
     ) {
-        // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
 
-        // categoryId, postId로 특정 게시글 단건 데이터를 조회합니다.
         FetchPostResponse fetchedPost = postService.fetchPost(category.getId(), postId);
 
-        // postId로 특정 게시글의 상세 정보를 조회합니다.
         FetchPostResponse fetchedPostById = postService.fetchPostById(postId);
 
         if (fetchedPost == null && fetchedPostById != null) {
@@ -68,66 +59,49 @@ public class PostApi {
                     .categoryName(fetchedPostById.categoryName())
                     .build();
 
-            return new ResponseEntity<>(
-                    new ResponseDto<>(ResponseDto.Status.FAILURE, "게시글 조회 실패: 게시글은 존재하지만, 카테고리가 일치하지 않습니다.", categoryResponse),
-                    HttpStatus.NOT_FOUND
-            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(categoryResponse);
         } else if (fetchedPost != null) {
-            return new ResponseEntity<>(
-                    new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 조회 성공", fetchedPost),
-                    HttpStatus.OK
-            );
+            return ResponseEntity.ok(fetchedPost);
         } else {
-            return new ResponseEntity<>(
-                    new ResponseDto<>(ResponseDto.Status.FAILURE, "게시글 조회 실패: 존재하지 않는 게시글입니다.", null),
-                    HttpStatus.NOT_FOUND
-            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+
     @GetMapping("/api/posts/{categoryName}")
-    public ResponseEntity<ResponseDto<FetchPostsResponse>> fetchPosts (
+    public ResponseEntity<FetchPostsResponse> fetchPosts (
             @PathVariable String categoryName,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) LocalDateTime startDate,
             @RequestParam(required = false) LocalDateTime endDate,
             Pageable pageable
     ) {
-        // path의 categoryName을 사용하여 해당 카테고리를 가져옵니다.
         Category category = categoryService.getCategory(categoryName);
 
-        // categoryId의 게시글 목록 데이터를 가져옵니다.
         FetchPostsResponse fetchPostsResponse = postService.fetchPosts(category.getId(), title, startDate, endDate, pageable);
 
-        return new ResponseEntity<>(
-                new ResponseDto<>(ResponseDto.Status.SUCCESS, "게시글 목록 조회 성공", fetchPostsResponse),
-                HttpStatus.OK
-        );
+        return ResponseEntity.ok(fetchPostsResponse);
     }
+
 
     @DeleteMapping("/api/posts/{postId}")
     public ResponseEntity<Void> deletePost (@PathVariable Long postId) {
         postService.deletePost(postId);
-        return ResponseEntity.noContent().build(); // 204 No Content
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/api/posts/{postId}/likes")
-    public ResponseEntity<ResponseDto<LikePostResponse>> likePost (@PathVariable Long postId) {
+    public ResponseEntity<LikePostResponse> likePost (@PathVariable Long postId) {
         LikePostResponse likePostResponse = postService.likePost(postId);
 
-        return new ResponseEntity<>(
-                new ResponseDto<>(ResponseDto.Status.SUCCESS, "좋아요 요청 성공", likePostResponse),
-                HttpStatus.OK
-        );
+        return ResponseEntity.ok(likePostResponse);
     }
 
     @PostMapping("/api/posts/{postId}/dislikes")
-    public ResponseEntity<ResponseDto<DislikePostResponse>> dislikePost (@PathVariable Long postId) {
+    public ResponseEntity<DislikePostResponse> dislikePost (@PathVariable Long postId) {
         DislikePostResponse dislikePostResponse = postService.dislikePost(postId);
 
-        return new ResponseEntity<>(
-                new ResponseDto<>(ResponseDto.Status.SUCCESS, "싫어요 요청 성공", dislikePostResponse),
-                HttpStatus.OK
-        );
+        return ResponseEntity.ok(dislikePostResponse);
     }
 }
