@@ -105,49 +105,41 @@ public class PostService {
             Long categoryId,
             Long postId
     ) {
-        try {
-            Post fetchedPost = postRepository.findByCategoryIdAndId(categoryId, postId)
-                    .orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
+        Post fetchedPost = postRepository.findByCategoryIdAndId(categoryId, postId)
+                .orElseThrow(() -> new RuntimeException("categoryId와 postId에 해당하는 게시글이 존재하지 않습니다."));
 
-            return FetchPostResponse.builder()
-                    .id(fetchedPost.getId())
-                    .title(fetchedPost.getTitle())
-                    .contents(fetchedPost.getContents())
-                    .writer(fetchedPost.getWriter())
-                    .youtubeUrl(fetchedPost.getYoutubeUrl())
-                    .likeCount(fetchedPost.getLikeCount())
-                    .dislikeCount(fetchedPost.getDislikeCount())
-                    .imagePathList(fetchedPost.getImagePathList())
-                    .postAddress(fetchedPost.getPostAddress())
-                    .categoryName(fetchedPost.getCategory().getName())
-                    .createdAt(fetchedPost.getCreatedAt())
-                    .updatedAt(fetchedPost.getUpdatedAt())
-                    .build();
-        } catch (Exception e) {
-            return null;
-        }
+        return FetchPostResponse.builder()
+                .id(fetchedPost.getId())
+                .title(fetchedPost.getTitle())
+                .contents(fetchedPost.getContents())
+                .writer(fetchedPost.getWriter())
+                .youtubeUrl(fetchedPost.getYoutubeUrl())
+                .likeCount(fetchedPost.getLikeCount())
+                .dislikeCount(fetchedPost.getDislikeCount())
+                .imagePathList(fetchedPost.getImagePathList())
+                .postAddress(fetchedPost.getPostAddress())
+                .categoryName(fetchedPost.getCategory().getName())
+                .createdAt(fetchedPost.getCreatedAt())
+                .updatedAt(fetchedPost.getUpdatedAt())
+                .build();
     }
 
     public FetchPostResponse fetchPostById(Long postId) {
-        try {
-            Post fetchedPostById = postRepository.findById(postId)
-                    .orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
+        Post fetchedPostById = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("postId에 해당하는 게시글이 존재하지 않습니다."));
 
-            return FetchPostResponse.builder()
-                    .id(fetchedPostById.getId())
-                    .title(fetchedPostById.getTitle())
-                    .contents(fetchedPostById.getContents())
-                    .writer(fetchedPostById.getWriter())
-                    .youtubeUrl(fetchedPostById.getYoutubeUrl())
-                    .likeCount(fetchedPostById.getLikeCount())
-                    .dislikeCount(fetchedPostById.getDislikeCount())
-                    .imagePathList(fetchedPostById.getImagePathList())
-                    .postAddress(fetchedPostById.getPostAddress())
-                    .categoryName(fetchedPostById.getCategory().getName())
-                    .build();
-        } catch (Exception e) {
-            return null;
-        }
+        return FetchPostResponse.builder()
+                .id(fetchedPostById.getId())
+                .title(fetchedPostById.getTitle())
+                .contents(fetchedPostById.getContents())
+                .writer(fetchedPostById.getWriter())
+                .youtubeUrl(fetchedPostById.getYoutubeUrl())
+                .likeCount(fetchedPostById.getLikeCount())
+                .dislikeCount(fetchedPostById.getDislikeCount())
+                .imagePathList(fetchedPostById.getImagePathList())
+                .postAddress(fetchedPostById.getPostAddress())
+                .categoryName(fetchedPostById.getCategory().getName())
+                .build();
     }
 
     public FetchPostsResponse fetchPosts (
